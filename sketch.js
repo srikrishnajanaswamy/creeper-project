@@ -42,6 +42,8 @@ async function tmLoop() {
       currentGesture = "redball";
     } else if (label.includes("green ball") || label.includes("green ball")) {
       currentGesture = "greenball";
+    } else if (label.includes("water bottle") || label.includes("water bottle")) {
+      currentGesture = "water bottle";
     }
     else {
       currentGesture = "none";
