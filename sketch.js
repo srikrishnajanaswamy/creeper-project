@@ -9,7 +9,7 @@
 //  <script src="https://cdn.jsdelivr.net/npm/@teachablemachine/image@0.8/dist/teachablemachine-image.min.js"></script>
 // ============================================================
 
-const MODEL_URL = "https://teachablemachine.withgoogle.com/models/43prg9ZF6/";
+const MODEL_URL = "https://teachablemachine.withgoogle.com/models/-t3u7eyZv/";
 
 // ─── Teachable Machine State ────────────────────────────────
 let tmModel, tmWebcam;
@@ -38,7 +38,12 @@ async function tmLoop() {
       currentGesture = "thumbsup";
     } else if (label.includes("thumbs down") || label.includes("thumb down")) {
       currentGesture = "thumbsdown";
-    } else {
+    } else if (label.includes("red ball") || label.includes("red ball")) {
+      currentGesture = "redball";
+    } else if (label.includes("green ball") || label.includes("green ball")) {
+      currentGesture = "greenball";
+    }
+    else {
       currentGesture = "none";
     }
   } else {
@@ -181,6 +186,23 @@ function draw() {
     }
     statusText = "✨ REFORMING...";
   }
+  if (g === "redball" && gestureHold > 20 && state !== STATES.WALK && state !== STATES.REFORM) {
+    state = STATES.REFORM;
+    reformTimer = 0;
+    // Scatter pieces to random locations so they fly IN
+    for (const pc of pieces) {
+      pc.px = random(0, width);
+      pc.py = random(0, height);
+    }
+    statusText = "✨ REFORMING...";
+  }
+  if (g === "greenball" && gestureHold > 20 && state !== STATES.EXPLODE) {
+    state = STATES.EXPLODE;
+    buildPieces(cx, cy);
+    scatterPieces();
+    statusText = "💥 BOOM!";
+  }
+  
 
   // ── IDLE ──
   if (state === STATES.IDLE) {
